@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IPeople } from './interface/people';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ export class HttpService {
   apiUrl = "https://localhost:7259";
   constructor(private http: HttpClient) { }
 
-  getAllPeople() {
-    return this.http.get<IPeople[]>(`${this.apiUrl}/api/Manage`);
-  }
-    
+  getAllPeople(offset: number, pageSize: number): Observable<IPeople[]> {
+    const apiUrl = `${this.apiUrl}/api/Manage?offset=${offset}&pageSize=${pageSize}`;
+    return this.http.get<IPeople[]>(apiUrl);
+}
+
   createPeople(people: IPeople) {
     return this.http.post(`${this.apiUrl}/api/Manage`, people);
   }
@@ -30,8 +32,8 @@ export class HttpService {
     return this.http.delete(`${this.apiUrl}/api/Manage/${peopleId}`);
   }
 
-  deleteByIds() {
-    return this.http.delete(`https://localhost:7259/api/Manage/multiple`)
+  deleteByIds(ids: number[]) {
+  return this.http.delete(`https://localhost:7259/api/Manage/multiple`, { body: ids });
   }
 
   deletePeople(){
