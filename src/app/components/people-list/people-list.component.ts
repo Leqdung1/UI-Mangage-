@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
+import e from 'express';
 
 
 @Component({
@@ -23,8 +24,8 @@ export class PeopleListComponent {
   peopleList: IPeople[] = [];
   selection = new SelectionModel<IPeople>(true, []); 
   currentPage = 1;
-  pageSize = 10;
-  totalPages = 0;
+  pageSize = 8;
+  totalPages = this.currentPage;
   httpService = inject(HttpService);
   router = inject(Router)
   displayedColumns: string[] = ['selection', 'id', 'name', 'dob', 'action'];
@@ -35,19 +36,24 @@ export class PeopleListComponent {
   }
 
   ngOnInit() {
-    this.loadPeople();
+    this.loadPeople().catch((e) => {
+      console.log(e);
+    })
   }
 
-  loadPeople() {
+  async loadPeople() {
     const offset = (this.currentPage - 1) * this.pageSize;
-  
-    this.httpService.getAllPeople(offset, this.pageSize).subscribe((data: IPeople[]) => {
-      console.log('Data received:', data);
-      this.dataSource = new MatTableDataSource<IPeople>(data);
-      this.totalPages = Math.ceil(data.length / this.pageSize);
-    }, error => {
-      console.error('Error fetching people:', error);
-    });
+    this.httpService.getAllPeople(offset, this.pageSize, this.currentPage).subscribe({
+      next: (v) => {
+        this.dataSource = new MatTableDataSource(v.people);
+        this.totalPages = Number(v.totalPages);
+        console.log(this.currentPage); 
+        console.log('Data received', v);
+      },
+      error: (e) =>{
+        console.error(e)
+      }
+     })
   }
   
   edit(id: number) {
@@ -116,7 +122,7 @@ export class PeopleListComponent {
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.loadPeople();
+       this.loadPeople();
     }
   }
 }

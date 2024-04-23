@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IPeople } from './interface/people';
+import { IPeople, PeopleList } from './interface/people';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,10 +11,10 @@ export class HttpService {
   apiUrl = "https://localhost:7259";
   constructor(private http: HttpClient) { }
 
-  getAllPeople(offset: number, pageSize: number): Observable<IPeople[]> {
-    const apiUrl = `${this.apiUrl}/api/Manage?offset=${offset}&pageSize=${pageSize}`;
-    return this.http.get<IPeople[]>(apiUrl);
-}
+  getAllPeople(offset: number, pageSize: number, currentPage: number) {
+    const apiUrl = `${this.apiUrl}/api/Manage?offset=${offset}&pageSize=${pageSize}&pageNumber=${currentPage}`;   
+    return this.http.get<PeopleList>(apiUrl);
+  }
 
   createPeople(people: IPeople) {
     return this.http.post(`${this.apiUrl}/api/Manage`, people);
