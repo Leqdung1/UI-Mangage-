@@ -10,13 +10,13 @@ import { MatCardModule } from '@angular/material/card';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
-import e from 'express';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-people-list',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, RouterLink, MatCheckboxModule, MatCardModule, MatIconModule],
+  imports: [MatTableModule, MatButtonModule, RouterLink, MatCheckboxModule, MatCardModule, MatIconModule, CommonModule],
   templateUrl: './people-list.component.html',
   styleUrl: './people-list.component.css'
 })
@@ -46,8 +46,7 @@ export class PeopleListComponent {
     this.httpService.getAllPeople(offset, this.pageSize, this.currentPage).subscribe({
       next: (v) => {
         this.dataSource = new MatTableDataSource(v.people);
-        this.totalPages = Number(v.totalPages);
-        console.log(this.currentPage); 
+        this.totalPages = Number(v.totalPages); 
         console.log('Data received', v);
       },
       error: (e) =>{
