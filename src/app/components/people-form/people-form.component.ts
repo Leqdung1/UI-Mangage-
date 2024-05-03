@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
-
 import { HttpService } from '../../http.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPeople } from '../../interface/people';
+
 
 @Component({
   selector: 'app-people-form',
@@ -21,7 +21,7 @@ export class PeopleFormComponent {
   route = inject(ActivatedRoute);
 
   peopleForm = this.formBuilder.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]], // Only allows letters and spaces
     dob: ['', [Validators.required]],
   })
 

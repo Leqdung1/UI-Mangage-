@@ -83,7 +83,7 @@ export class PeopleListComponent {
 
   // Delete All the API (but dont use anymore) :>
   deleteAll() {
-    this.httpService.deletePeople().subscribe(() => {
+    this.httpService.deleteAllPeople().subscribe(() => {
       console.log("deleted successfully");
       this.peopleList = [];
     });

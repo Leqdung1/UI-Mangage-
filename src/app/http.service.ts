@@ -9,35 +9,35 @@ import { Observable } from 'rxjs';
 export class HttpService {
 
   apiUrl = "https://localhost:7259";
+
   constructor(private http: HttpClient) { }
 
-  getAllPeople(offset: number, pageSize: number, currentPage: number) {
+  getAllPeople(offset: number, pageSize: number, currentPage: number): Observable<PeopleList> {
     const apiUrl = `${this.apiUrl}/api/Manage?offset=${offset}&pageSize=${pageSize}&pageNumber=${currentPage}`;   
     return this.http.get<PeopleList>(apiUrl);
   }
 
-  createPeople(people: IPeople) {
+  createPeople(people: IPeople): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/Manage`, people);
   }
 
-  getPeople(peopleId: number) {
+  getPeople(peopleId: number): Observable<IPeople> {
     return this.http.get<IPeople>(`${this.apiUrl}/api/Manage/${peopleId}`);
   }
 
-  updatePeople(peopleId: number, employee: IPeople) {
-    return this.http.put<IPeople>(`${this.apiUrl}/api/Manage/${peopleId}`, employee);
+  updatePeople(peopleId: number, people: IPeople): Observable<IPeople> {
+    return this.http.put<IPeople>(`${this.apiUrl}/api/Manage/${peopleId}`, people);
   }
 
-  deleteByPeopleId(peopleId: number) {
+  deleteByPeopleId(peopleId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/Manage/${peopleId}`);
   }
 
-  deleteByIds(ids: number[]) {
-  return this.http.delete(`https://localhost:7259/api/Manage/multiple`, { body: ids });
+  deleteByIds(ids: number[]): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/Manage/multiple`, { body: ids });
   }
 
-  deletePeople(){
-    return this.http.delete(`https://localhost:7259/api/Manage/all`);
+  deleteAllPeople(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/Manage/all`);
   }
-  
 }
