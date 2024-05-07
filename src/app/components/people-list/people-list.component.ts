@@ -11,12 +11,15 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; 
+
+
 
 
 @Component({
   selector: 'app-people-list',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, RouterLink, MatCheckboxModule, MatCardModule, MatIconModule, CommonModule],
+  imports: [MatTableModule, MatButtonModule, RouterLink, MatCheckboxModule, MatCardModule, MatIconModule, CommonModule, FormsModule,],
   templateUrl: './people-list.component.html',
   styleUrl: './people-list.component.css'
 })
@@ -31,6 +34,9 @@ export class PeopleListComponent {
   displayedColumns: string[] = ['selection', 'id', 'name', 'dob', 'action'];
   dataSource: MatTableDataSource<IPeople>;
 
+  name: string = '';
+  dob: string = ''; 
+
   constructor() {
     this.dataSource = new MatTableDataSource<IPeople>([]);
   }
@@ -38,7 +44,7 @@ export class PeopleListComponent {
   ngOnInit() {
     this.loadPeople().catch((e) => {
       console.log(e);
-    })
+    })  
   }
 
   async loadPeople() {
@@ -55,9 +61,26 @@ export class PeopleListComponent {
      })
   }
   
+  // edit 
   edit(id: number) {
     console.log(id);
     this.router.navigateByUrl("/people/" + id);
+  }
+
+  // search name or dob
+  searchInfo(name: string, dob: string) {
+    console.log("Name:", name);
+    console.log("DOB:", dob);
+    this.httpService.search(name, dob).subscribe(
+      (response: IPeople[]) => {
+        console.log("Success", response);
+        this.dataSource.data = response; // Update dataSource with search results
+      },
+      (error) => {
+        console.error("Error occurred while searching:", error);
+        this.dataSource.data = []; // Clear dataSource in case of error
+      }
+    );
   }
 
   // delete by id 

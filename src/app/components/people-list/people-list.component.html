@@ -1,7 +1,16 @@
 <div>
     <button routerLink="/create-people" mat-raised-button color="primary">Add Information</button>
     <button routerLink="/" mat-raised-button color="warn" (click)="deleteIds()">Delete</button>
-    
+
+    <!-- Search -->
+    <div class="search-section">
+        <input type="search" placeholder="Name" [(ngModel)]="name">
+        <input type="search" placeholder="Date of Birth" [(ngModel)]="dob">
+        <button mat-icon-button color="primary" name="search" (click)="searchInfo(name, dob)">
+            <mat-icon>search</mat-icon>
+        </button>
+    </div>
+
     <div class="mat-elevation-z8 w-full">
         <table mat-table [dataSource]="dataSource">
             
@@ -14,7 +23,7 @@
                     <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"></mat-checkbox>
                 </td>
             </ng-container>
-    
+     
             <!-- Name Column -->
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef> Id </th>

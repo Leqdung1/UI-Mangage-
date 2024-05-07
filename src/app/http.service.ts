@@ -17,6 +17,10 @@ export class HttpService {
     return this.http.get<PeopleList>(apiUrl);
   }
 
+  search(name: string, dob: string): Observable<IPeople[]> {
+    return this.http.get<IPeople[]>(`${this.apiUrl}/api/Manage/search?name=${name}&dob=${dob}`);
+  }
+  
   createPeople(people: IPeople): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/Manage`, people);
   }
@@ -40,4 +44,5 @@ export class HttpService {
   deleteAllPeople(): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/Manage/all`);
   }
+
 }
